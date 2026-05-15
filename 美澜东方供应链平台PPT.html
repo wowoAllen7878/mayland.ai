@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美澜东方"城市U计划"供应链平台方案 - 华中婚礼堂供应链联盟发起计划</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --primary-light: #141414;
+            --accent: #00d084;
+            --accent-dim: rgba(0, 208, 132, 0.15);
+            --accent-glow: rgba(0, 208, 132, 0.3);
+            --card-bg: #161616;
+            --card-border: #2a2a2a;
+            --text-white: #ffffff;
+            --text-primary: #e8e8e8;
+            --text-secondary: #999999;
+            --text-muted: #666666;
+            --success: #00d084;
+            --warning: #f0b429;
+            --danger: #ff4757;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            padding: 50px 80px 60px 80px;
+            background: var(--primary);
+            color: var(--text-primary);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 封面样式 - TRAE风格：黑底+青绿 */
+        .slide-cover {
+            background: #000000;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .slide-cover .main-title {
+            font-size: 72px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(0, 208, 132, 0.3);
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #ffffff 0%, #00d084 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-cover .sub-title {
+            font-size: 36px;
+            font-weight: 400;
+            color: #00d084;
+            margin-bottom: 50px;
+        }
+
+        .slide-cover .slogan {
+            font-size: 28px;
+            color: rgba(255,255,255,0.9);
+            padding: 20px 40px;
+            border: 2px solid #00d084;
+            border-radius: 50px;
+            display: inline-block;
+            background: rgba(0, 208, 132, 0.1);
+        }
+
+        .slide-cover .visual-element {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            opacity: 0.15;
+        }
+
+        .slide-cover .visual-element:nth-child(1) {
+            top: 5%;
+            left: 5%;
+            background: radial-gradient(circle, #00d084 0%, transparent 70%);
+        }
+
+        .slide-cover .visual-element:nth-child(2) {
+            bottom: 5%;
+            right: 5%;
+            background: radial-gradient(circle, #00d084 0%, transparent 70%);
+        }
+
+        /* 通用标题样式 */
+        .slide-header {
+            margin-bottom: 40px;
+        }
+
+        .slide-number {
+            font-size: 18px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-white);
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 120px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), rgba(0, 208, 132, 0.3));
+            border-radius: 2px;
+        }
+
+        /* 目录样式 */
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .toc-item {
+            background: var(--card-bg);
+            padding: 25px 30px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            border-left: 4px solid var(--accent);
+        }
+
+        .toc-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-dim);
+        }
+
+        .toc-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            min-width: 50px;
+        }
+
+        .toc-text {
+            font-size: 20px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0, 208, 132, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* 数据展示 */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .data-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), rgba(0, 208, 132, 0.2));
+        }
+
+        .data-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .data-label {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        /* 对比表格 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        .comparison-table th {
+            background: rgba(0, 208, 132, 0.15);
+            color: var(--accent);
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .highlight {
+            background: var(--accent-dim);
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* 流程图 */
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .process-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-box {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid var(--card-border);
+            margin: 0 10px;
+        }
+
+        .process-arrow {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), rgba(0, 208, 132, 0.2));
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            margin: 0 auto 15px;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 价值卡片 */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .value-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--card-border);
+            position: relative;
+            padding-left: 80px;
+        }
+
+        .value-number {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .value-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 10px;
+        }
+
+        .value-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .value-highlight {
+            display: inline-block;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0, 208, 132, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-top: 10px;
+        }
+
+        /* 时间轴 */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), rgba(0, 208, 132, 0.2));
+        }
+
+        .timeline-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 70px;
+            height: 70px;
+            background: var(--card-bg);
+            border: 3px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .timeline-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 0 10px;
+            border: 1px solid var(--card-border);
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 10px;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* 导航控制 */
+        .nav-trigger {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            z-index: 999;
+        }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid var(--card-border);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .nav-trigger:hover + .nav-controls,
+        .nav-controls:hover {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            background: var(--accent);
+            color: #000;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: #00e893;
+            transform: scale(1.1);
+        }
+
+        .nav-btn:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 20px;
+        }
+
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slide-dot.active {
+            background: var(--accent);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .slide-counter {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* 列表样式 */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 16px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* 强调框 */
+        .highlight-box {
+            background: var(--accent-dim);
+            border-left: 4px solid var(--accent);
+            padding: 20px 25px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        /* 两栏布局 */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        /* 收入结构 */
+        .revenue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .revenue-item:last-child {
+            border-bottom: none;
+        }
+
+        .revenue-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        .revenue-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* FAQ样式 */
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+        }
+
+        .faq-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .faq-question::before {
+            content: 'Q';
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            padding-left: 40px;
+        }
+
+        /* 总结页 */
+        .slide-summary {
+            background: #000000;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .summary-box {
+            background: rgba(0, 208, 132, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 60px 80px;
+            border: 2px solid rgba(0, 208, 132, 0.25);
+            max-width: 900px;
+        }
+
+        .summary-text {
+            font-size: 32px;
+            line-height: 1.8;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .summary-text .highlight {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .keywords {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .keyword {
+            text-align: center;
+        }
+
+        .keyword-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent-dim);
+            border: 2px solid rgba(0, 208, 132, 0.3);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 15px;
+        }
+
+        .keyword-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-white);
+        }
+
+        /* 风险等级标签 */
+        .risk-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .risk-high {
+            background: rgba(255, 71, 87, 0.15);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .risk-medium {
+            background: rgba(240, 180, 41, 0.15);
+            color: #f0b429;
+            border: 1px solid rgba(240, 180, 41, 0.3);
+        }
+
+        .risk-low {
+            background: rgba(0, 208, 132, 0.15);
+            color: #00d084;
+            border: 1px solid rgba(0, 208, 132, 0.3);
+        }
+
+        /* 护城河层级 */
+        .moat-level {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+        }
+
+        .moat-number {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .moat-content {
+            flex: 1;
+        }
+
+        .moat-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 5px;
+        }
+
+        .moat-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* 响应式 */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 40px 50px;
+            }
+            
+            .slide-title {
+                font-size: 36px;
+            }
+            
+            .data-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 打印样式 */
+        @media print {
+            .slide {
+                page-break-after: always;
+                opacity: 1 !important;
+                visibility: visible !important;
+                position: relative !important;
+            }
+            
+            .nav-controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Page 01: 封面 -->
+        <div class="slide slide-cover active" data-slide="1">
+            <div class="visual-element"></div>
+            <div class="visual-element"></div>
+            <h1 class="main-title">美澜东方"城市U计划"<br>供应链平台方案</h1>
+            <p class="sub-title">华中婚礼堂供应链联盟发起计划</p>
+            <p class="slogan">"去中间商，拿底价，将孤舰航行变成联合舰队"</p>
+        </div>
+
+        <!-- Page 02: 目录 -->
+        <div class="slide" data-slide="2">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 02</div>
+                <h2 class="slide-title">目录</h2>
+            </div>
+            <div class="toc-grid">
+                <div class="toc-item">
+                    <span class="toc-number">01</span>
+                    <span class="toc-text">项目背景与战略定位</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">02</span>
+                    <span class="toc-text">商业模式拆解</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">03</span>
+                    <span class="toc-text">联盟价值主张</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">04</span>
+                    <span class="toc-text">选品策略</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">05</span>
+                    <span class="toc-text">平台搭建路径</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">06</span>
+                    <span class="toc-text">核心产品/服务设计</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">07</span>
+                    <span class="toc-text">风险防控与护城河</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">08</span>
+                    <span class="toc-text">三年战略规划</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">09</span>
+                    <span class="toc-text">关键成功因素</span>
+                </div>
+                <div class="toc-item">
+                    <span class="toc-number">10</span>
+                    <span class="toc-text">总结与展望</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 03: 项目背景 -->
+        <div class="slide" data-slide="3">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 03</div>
+                <h2 class="slide-title">为什么现在是好时机？</h2>
+            </div>
+            
+            <div class="data-grid">
+                <div class="data-card">
+                    <div class="data-value">1.62万亿</div>
+                    <div class="data-label">宴会市场规模</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">390亿+</div>
+                    <div class="data-label">华中市场规模</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">&lt;1%</div>
+                    <div class="data-label">供应链数字化率</div>
+                </div>
+                <div class="data-card">
+                    <div class="data-value">12-18月</div>
+                    <div class="data-label">竞争窗口期</div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">🎯</div>
+                        婚礼堂痛点
+                    </div>
+                    <ul class="feature-list">
+                        <li>单家采购量小，议价权弱</li>
+                        <li>多层中间商，价格不透明</li>
+                        <li>各自为战，没有组队意识</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">🚀</div>
+                        机会点
+                    </div>
+                    <ul class="feature-list">
+                        <li>谁先组队，谁就是大哥</li>
+                        <li>先发优势明显，后来者难以复制</li>
+                        <li>平台模式可复制，无规模上限</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>市场环境：</strong>三四线城市增速23.7%，竞争格局未固化，供应链数字化率不足1%，窗口期已到！
+            </div>
+        </div>
+
+        <!-- Page 04: 战略定位 -->
+        <div class="slide" data-slide="4">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 04</div>
+                <h2 class="slide-title">战略定位：从供货商到平台方</h2>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">维度</th>
+                        <th style="width: 35%;">供货商思维</th>
+                        <th style="width: 50%;">平台思维（我们）</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>定位</strong></td>
+                        <td>把货卖给你</td>
+                        <td class="highlight">帮你们一起买</td>
+                    </tr>
+                    <tr>
+                        <td><strong>盈利</strong></td>
+                        <td>赚买卖差价</td>
+                        <td class="highlight">收整合服务费</td>
+                    </tr>
+                    <tr>
+                        <td><strong>规模逻辑</strong></td>
+                        <td>我卖越多赚越多</td>
+                        <td class="highlight">盟友越多，议价权越大</td>
+                    </tr>
+                    <tr>
+                        <td><strong>护城河</strong></td>
+                        <td>价格低</td>
+                        <td class="highlight">联盟规模 + 行业标准</td>
+                    </tr>
+                    <tr>
+                        <td><strong>资产轻重</strong></td>
+                        <td>重（压货/仓储/配送）</td>
+                        <td class="highlight">轻（纯平台运营）</td>
+                    </tr>
+                    <tr>
+                        <td><strong>可复制性</strong></td>
+                        <td>受限于自身资金</td>
+                        <td class="highlight">无限扩展</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="content-card" style="margin-top: 30px; background: var(--accent-dim); border: 1px solid rgba(0, 208, 132, 0.3); color: var(--text-primary);">
+                <div class="card-title" style="color: white;">
+                    <div class="card-icon" style="background: var(--accent);">👑</div>
+                    美澜东方的角色定位
+                </div>
+                <div style="font-size: 24px; text-align: center; padding: 20px;">
+                    <p style="margin-bottom: 20px;">美澜东方 = 华中婚礼堂供应链联盟的</p>
+                    <p style="font-size: 32px; font-weight: 700; color: var(--accent); margin-bottom: 15px;">
+                        【牵头发起方】×【平台运营方】×【行业标准制定者】
+                    </p>
+                    <p style="font-size: 20px; opacity: 0.9;">核心角色：联盟大哥，不是供货商</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 05: 商业逻辑 -->
+        <div class="slide" data-slide="5">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 05</div>
+                <h2 class="slide-title">联盟如何运转？</h2>
+            </div>
+
+            <div class="process-flow">
+                <div class="process-arrow"></div>
+                <div class="process-step">
+                    <div class="process-box">
+                        <div class="step-number">1</div>
+                        <div class="step-title">组局</div>
+                        <div class="step-desc">婚礼堂联合形成采购联盟<br>美澜牵头运营平台</div>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-box">
+                        <div class="step-number">2</div>
+                        <div class="step-title">谈判</div>
+                        <div class="step-desc">拿着联盟总量找供应商<br>量级越大议价权越强</div>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-box">
+                        <div class="step-number">3</div>
+                        <div class="step-title">让利</div>
+                        <div class="step-desc">供应商给低价+长账期<br>盟友享底价美澜收服务费</div>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-box">
+                        <div class="step-number">4</div>
+                        <div class="step-title">共赢</div>
+                        <div class="step-desc">盟友省钱10-15%<br>美澜赚服务费3-5%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column" style="margin-top: 40px;">
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">💰</div>
+                        联盟组成示例
+                    </div>
+                    <ul class="feature-list">
+                        <li>A家婚礼堂：年采购500万</li>
+                        <li>B家婚礼堂：年采购300万</li>
+                        <li>C家婚礼堂：年采购600万</li>
+                        <li>美澜东方：年采购400万</li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <strong>联盟年采购量：1800万</strong>
+                    </div>
+                </div>
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">📊</div>
+                        价值分配示例
+                    </div>
+                    <ul class="feature-list">
+                        <li>A家省了：500万 × 12% = <strong>60万/年</strong></li>
+                        <li>B家省了：300万 × 12% = <strong>36万/年</strong></li>
+                        <li>C家省了：600万 × 12% = <strong>72万/年</strong></li>
+                        <li>美澜省了：400万 × 12% = <strong>48万/年</strong></li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top: 15px; background: linear-gradient(90deg, rgba(56, 161, 105, 0.1), transparent); border-left-color: var(--success);">
+                        <strong>联盟总计省了：216万/年</strong><br>
+                        美澜收取服务费：1800万 × 4% = <strong>72万/年</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 06: 盈利模式 -->
+        <div class="slide" data-slide="6">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 06</div>
+                <h2 class="slide-title">盈利模式：美澜的收入来源</h2>
+            </div>
+
+            <div class="two-column">
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">💵</div>
+                        收入结构
+                    </div>
+                    <div class="revenue-item">
+                        <span class="revenue-name">整合服务费</span>
+                        <span class="revenue-value">150-250万</span>
+                    </div>
+                    <div class="revenue-item">
+                        <span class="revenue-name">供应链金融</span>
+                        <span class="revenue-value">30-50万</span>
+                    </div>
+                    <div class="revenue-item">
+                        <span class="revenue-name">数据服务</span>
+                        <span class="revenue-value">10-20万</span>
+                    </div>
+                    <div class="revenue-item" style="background: linear-gradient(90deg, rgba(214, 158, 46, 0.1), transparent); margin: 15px -30px -30px; padding: 20px 30px;">
+                        <span class="revenue-name" style="font-size: 20px;">合计</span>
+                        <span class="revenue-value" style="font-size: 32px; color: var(--success);">190-320万/年</span>
+                    </div>
+                </div>
+
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">🎁</div>
+                        隐性收益
+                    </div>
+                    <ul class="feature-list">
+                        <li>自身采购成本下降<strong>12-15%</strong></li>
+                        <li>行业影响力提升 → 品牌溢价</li>
+                        <li>掌握行业数据 → 决策更精准</li>
+                        <li>盟友资源 → 跨界合作机会</li>
+                        <li>平台规模 → 资本故事（未来可融资）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="margin-top: 30px;">
+                <strong>核心逻辑：</strong>服务费按联盟采购额的3-5%收取，盟友省钱越多，平台收入越高，利益深度绑定！
+            </div>
+        </div>
+
+        <!-- Page 07: 盟友价值主张 -->
+        <div class="slide" data-slide="7">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 07</div>
+                <h2 class="slide-title">给盟友的4大核心价值</h2>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-number">①</div>
+                    <div class="value-title">采购成本直降10-15%</div>
+                    <div class="value-desc">抱团后量级翻倍，议价权倍增，让每一分钱都花在刀刃上</div>
+                    <span class="value-highlight">年省10-60万/家</span>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">②</div>
+                    <div class="value-title">去中间商，价格透明</div>
+                    <div class="value-desc">去掉2-3层中间商，源头直采，价格体系公开透明</div>
+                    <span class="value-highlight">成本再降5-8%</span>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">③</div>
+                    <div class="value-title">品质有保障</div>
+                    <div class="value-desc">平台统一品控标准，出问题平台兜底，降低客诉风险</div>
+                    <span class="value-highlight">降低客诉率</span>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">④</div>
+                    <div class="value-title">行业情报共享</div>
+                    <div class="value-desc">价格走势、供应商黑名单、新品推荐，信息差就是利润差</div>
+                    <span class="value-highlight">信息差优势</span>
+                </div>
+            </div>
+
+            <div class="content-card" style="margin-top: 30px;">
+                <div class="card-title">
+                    <div class="card-icon">📋</div>
+                    服务清单
+                </div>
+                <div class="two-column" style="margin-top: 0; gap: 30px;">
+                    <div>
+                        <p style="font-weight: 600; color: var(--success); margin-bottom: 10px;">✅ 基础服务（免费）</p>
+                        <ul class="feature-list">
+                            <li>实时价格查询</li>
+                            <li>供应商信息共享</li>
+                            <li>行业资讯推送</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p style="font-weight: 600; color: var(--accent); margin-bottom: 10px;">⭐ 会员服务（付费）</p>
+                        <ul class="feature-list">
+                            <li>优先供货保障</li>
+                            <li>账期延长服务</li>
+                            <li>专属定制采购</li>
+                            <li>7×24小时客服</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 08: 选品策略 -->
+        <div class="slide" data-slide="8">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 08</div>
+                <h2 class="slide-title">选品策略：盟友最需要什么？</h2>
+            </div>
+
+            <table class="comparison-table" style="margin-bottom: 30px;">
+                <thead>
+                    <tr>
+                        <th>维度</th>
+                        <th>说明</th>
+                        <th>标准</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>高频刚需</strong></td>
+                        <td>菜单覆盖率≥70%</td>
+                        <td><span class="risk-tag risk-high">优先选</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>毛利空间</strong></td>
+                        <td>有压缩空间，去中间商后让利</td>
+                        <td><span class="risk-tag risk-high">优先选</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>供应链成熟度</strong></td>
+                        <td>易采购/易储存/易配送</td>
+                        <td><span class="risk-tag risk-medium">必须满足</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>损耗可控</strong></td>
+                        <td>标准化程度高</td>
+                        <td><span class="risk-tag risk-medium">必须满足</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">第一阶段</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">海鲜大件切入</div>
+                        <div class="timeline-desc">波龙/帝王蟹/东星斑<br>金额大，节省空间大</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">第二阶段</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">延伸至家禽肉类</div>
+                        <div class="timeline-desc">鸡/鸭/鹅<br>出场率更高，刚需</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">第三阶段</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">全品类覆盖</div>
+                        <div class="timeline-desc">蔬菜菌菇/酒水饮料<br>一站式采购体验</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 09: 四步走路径 -->
+        <div class="slide" data-slide="9">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 09</div>
+                <h2 class="slide-title">平台搭建路径：四步走战略</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="font-size: 12px;">第1-3月</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">第一步：先跑通</div>
+                        <div class="timeline-desc">
+                            ✅ 建立供应商库（≥3家备选）<br>
+                            ✅ 制定品质标准<br>
+                            ✅ 跑通配送流程<br>
+                            ✅ 建立价格体系
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="font-size: 12px;">第4-6月</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">第二步：拉标杆</div>
+                        <div class="timeline-desc">
+                            签约3-5家核心盟友<br>
+                            形成小联盟<br>
+                            <em>"我跑通了，你要不要跟我一起？"</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="font-size: 12px;">第7-12月</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">第三步：扩规模</div>
+                        <div class="timeline-desc">
+                            联盟扩至15-20家<br>
+                            形成规模效应<br>
+                            <em>"XX家都在用了，你要不要加入？"</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot" style="font-size: 12px;">第二年开始</div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">第四步：做标准</div>
+                        <div class="timeline-desc">
+                            ✅ 制定行业采购标准<br>
+                            ✅ 建立供应商评价体系<br>
+                            ✅ 推出行业认证/背书<br>
+                            ✅ 开放SaaS工具
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card" style="margin-top: 30px;">
+                <div class="card-title">
+                    <div class="card-icon">🎁</div>
+                    激励机制
+                </div>
+                <div class="two-column" style="margin-top: 0;">
+                    <ul class="feature-list">
+                        <li><strong>早鸟优惠：</strong>前10家加入，服务费8折</li>
+                        <li><strong>推荐奖励：</strong>老盟友推荐新盟友，奖励1个月服务费减免</li>
+                    </ul>
+                    <ul class="feature-list">
+                        <li><strong>阶梯优惠：</strong>年采购额≥1000万，服务费3%</li>
+                        <li><strong>战略股东：</strong>年采购额≥5000万，服务费2%+战略股东席位</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 10: 核心产品/服务 -->
+        <div class="slide" data-slide="10">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 10</div>
+                <h2 class="slide-title">核心产品/服务设计</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+                <div class="content-card" style="border-top: 3px solid var(--accent);">
+                    <div class="card-title">
+                        <div class="card-icon">🛒</div>
+                        联盟采购平台
+                    </div>
+                    <ul class="feature-list">
+                        <li>商品展示：图片/规格/价格/库存</li>
+                        <li>在线询价：一键询价，24小时报价</li>
+                        <li>订单管理：下单/支付/发货/收货</li>
+                        <li>物流追踪：实时位置+温控数据</li>
+                        <li>账务管理：账单/发票/对账</li>
+                    </ul>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(0, 208, 132, 0.08); border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
+                        <strong>技术方案：</strong>小程序/H5（盟友端）+ PC后台（运营端）+ API对接（供应商端）
+                    </div>
+                </div>
+
+                <div class="content-card" style="border-top: 3px solid var(--accent);">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: var(--accent-dim); border: 1px solid rgba(0, 208, 132, 0.3);">💳</div>
+                        供应链金融
+                    </div>
+                    <p style="font-weight: 600; color: var(--text-white); margin-bottom: 10px;">服务内容</p>
+                    <ul class="feature-list">
+                        <li>为中小盟友提供账期（先货后款）</li>
+                        <li>按天计息，年化8-12%</li>
+                    </ul>
+                    <p style="font-weight: 600; color: var(--text-white); margin: 15px 0 10px;">风控措施</p>
+                    <ul class="feature-list">
+                        <li>信用评估（白名单制）</li>
+                        <li>担保抵押（大额）</li>
+                        <li>实时监控（逾期预警）</li>
+                    </ul>
+                </div>
+
+                <div class="content-card" style="border-top: 3px solid var(--accent);">
+                    <div class="card-title">
+                        <div class="card-icon" style="background: var(--accent-dim); border: 1px solid rgba(0, 208, 132, 0.3);">📊</div>
+                        数据服务
+                    </div>
+                    <p style="font-weight: 600; color: var(--text-white); margin-bottom: 10px;">行情报告</p>
+                    <ul class="feature-list">
+                        <li>周度价格走势</li>
+                        <li>月度品类分析</li>
+                        <li>季度行业洞察</li>
+                    </ul>
+                    <p style="font-weight: 600; color: var(--text-white); margin: 15px 0 10px;">决策支持</p>
+                    <ul class="feature-list">
+                        <li>最优采购时机建议</li>
+                        <li>品类结构优化建议</li>
+                        <li>供应商性价比排行</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 11: 风险防控与护城河 -->
+        <div class="slide" data-slide="11">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 11</div>
+                <h2 class="slide-title">风险防控 + 护城河构建</h2>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <div class="card-title" style="margin-bottom: 20px;">
+                        <div class="card-icon">⚠️</div>
+                        主要风险及应对
+                    </div>
+                    <table class="comparison-table" style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>风险</th>
+                                <th>等级</th>
+                                <th>应对措施</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>盟友只想要低价，不想付费</td>
+                                <td><span class="risk-tag risk-high">高</span></td>
+                                <td>设计"省下来的钱分成"模式</td>
+                            </tr>
+                            <tr>
+                                <td>供应商质量不稳定</td>
+                                <td><span class="risk-tag risk-high">高</span></td>
+                                <td>每品≥3家备选，平台兜底</td>
+                            </tr>
+                            <tr>
+                                <td>盟友流失/跳单</td>
+                                <td><span class="risk-tag risk-high">高</span></td>
+                                <td>签排他协议+深度绑定</td>
+                            </tr>
+                            <tr>
+                                <td>竞争者复制</td>
+                                <td><span class="risk-tag risk-medium">中</span></td>
+                                <td>快速扩规模，抢占心智</td>
+                            </tr>
+                            <tr>
+                                <td>资金链断裂</td>
+                                <td><span class="risk-tag risk-medium">中</span></td>
+                                <td>控制节奏，不压货</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <div class="card-title" style="margin-bottom: 20px;">
+                        <div class="card-icon">🛡️</div>
+                        四大护城河
+                    </div>
+                    <div class="moat-level">
+                        <div class="moat-number">1</div>
+                        <div class="moat-content">
+                            <div class="moat-title">规模护城河</div>
+                            <div class="moat-desc">盟友越多→采购量越大→议价权越强→价格越低→吸引力越大（正循环）</div>
+                        </div>
+                    </div>
+                    <div class="moat-level">
+                        <div class="moat-number">2</div>
+                        <div class="moat-content">
+                            <div class="moat-title">标准护城河</div>
+                            <div class="moat-desc">制定行业标准→形成依赖→后来者必须兼容（制定规则者掌控游戏）</div>
+                        </div>
+                    </div>
+                    <div class="moat-level">
+                        <div class="moat-number">3</div>
+                        <div class="moat-content">
+                            <div class="moat-title">数据护城河</div>
+                            <div class="moat-desc">积累行业数据→决策更准→服务更好→粘性更高（数据是新的石油）</div>
+                        </div>
+                    </div>
+                    <div class="moat-level">
+                        <div class="moat-number">4</div>
+                        <div class="moat-content">
+                            <div class="moat-title">关系护城河</div>
+                            <div class="moat-desc">深度绑定盟友老板→成为朋友→不是纯粹商业关系（人情债最难还）</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 12: 三年战略规划 -->
+        <div class="slide" data-slide="12">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 12</div>
+                <h2 class="slide-title">三年战略规划</h2>
+            </div>
+
+            <table class="comparison-table" style="margin-bottom: 30px;">
+                <thead>
+                    <tr>
+                        <th>阶段</th>
+                        <th>时间</th>
+                        <th>盟友数量</th>
+                        <th>联盟年采购额</th>
+                        <th>美澜平台收入</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>验证期</strong></td>
+                        <td>第1年</td>
+                        <td>5-10家</td>
+                        <td>3000万</td>
+                        <td class="highlight">100-150万</td>
+                    </tr>
+                    <tr>
+                        <td><strong>扩张期</strong></td>
+                        <td>第2年</td>
+                        <td>20-30家</td>
+                        <td>8000万</td>
+                        <td class="highlight">250-350万</td>
+                    </tr>
+                    <tr>
+                        <td><strong>成熟期</strong></td>
+                        <td>第3年</td>
+                        <td>50-80家</td>
+                        <td>2亿+</td>
+                        <td class="highlight">600-800万</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="two-column">
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">📅</div>
+                        第1年：验证模式
+                    </div>
+                    <p style="font-weight: 600; color: var(--text-white); margin-bottom: 10px;">Q1-Q2</p>
+                    <ul class="feature-list">
+                        <li>跑通自身供应链</li>
+                        <li>拉5家种子盟友</li>
+                    </ul>
+                    <p style="font-weight: 600; color: var(--text-white); margin: 15px 0 10px;">Q3-Q4</p>
+                    <ul class="feature-list">
+                        <li>验证服务费模式</li>
+                        <li>迭代产品</li>
+                    </ul>
+                </div>
+                <div class="content-card">
+                    <div class="card-title">
+                        <div class="card-icon">📅</div>
+                        第2-3年：规模扩张→行业领导
+                    </div>
+                    <p style="font-weight: 600; color: var(--text-white); margin-bottom: 10px;">第2年</p>
+                    <ul class="feature-list">
+                        <li>复制到2-3个城市，扩至20家</li>
+                        <li>推出供应链金融、数据服务</li>
+                    </ul>
+                    <p style="font-weight: 600; color: var(--text-white); margin: 15px 0 10px;">第3年</p>
+                    <ul class="feature-list">
+                        <li>开放SaaS工具，赋能全行业</li>
+                        <li>筹备行业联盟大会，成为标准制定者</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 13: 关键成功因素 -->
+        <div class="slide" data-slide="13">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 13</div>
+                <h2 class="slide-title">成功的3个关键 + 失败的1个预警</h2>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-number">1</div>
+                    <div class="value-title">找对人</div>
+                    <div class="value-desc">
+                        <strong style="color: var(--success);">✓ 要找：</strong>规模相当（年采购300-800万）、理念一致、区域优先<br>
+                        <strong style="color: var(--danger);">✗ 不要找：</strong>只想占便宜不想付费的、把你当供货商比价的
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">2</div>
+                    <div class="value-title">做对事</div>
+                    <div class="value-desc">
+                        <strong style="color: var(--success);">✓ 要做：</strong>先跑通再复制，把流程/标准/问题都摸清楚<br>
+                        <strong style="color: var(--danger);">✗ 不要做：</strong>还没验证就大量招募、答应做不到的服务
+                    </div>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">3</div>
+                    <div class="value-title">收对钱</div>
+                    <div class="value-desc">
+                        <strong style="color: var(--success);">✓ 要收：</strong>服务费模式（3-5%），按实际采购额收费<br>
+                        <strong style="color: var(--danger);">✗ 不要收：</strong>高额会员费、差价模式、各种巧立名目的费用
+                    </div>
+                </div>
+                <div class="value-card" style="background: rgba(255, 71, 87, 0.08); border: 2px solid rgba(255, 71, 87, 0.3);">
+                    <div class="value-number" style="background: linear-gradient(135deg, #ff4757, #ff6b7a);">!</div>
+                    <div class="value-title" style="color: #ff4757;">⚠️ 失败预警</div>
+                    <div class="value-desc">
+                        <strong>最怕：盟友把你当供货商用</strong><br>
+                        现象：找你询价/比价，但下单在别处<br>
+                        解法：第一单必须漂亮交付，建立信任；定期维护关系
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 14: 常见问答 -->
+        <div class="slide" data-slide="14">
+            <div class="slide-header">
+                <div class="slide-number">PAGE 14</div>
+                <h2 class="slide-title">常见疑问解答</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="faq-item">
+                    <div class="faq-question">"我自己能拿到比平台更低的价格"</div>
+                    <div class="faq-answer">那是因为你的量不够大。等你做到5000万年采购再来谈。我们联盟可以谈到比你更低的价，因为我们的量是你的10倍。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">"为什么要付服务费？"</div>
+                    <div class="faq-answer">你省下的钱比服务费多10倍。比如年采购500万，平台帮你省60万，服务费只收20万，你净赚40万。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">"平台能保证品质吗？"</div>
+                    <div class="faq-answer">每批货都有质检，不满意可退换。出了问题平台兜底，不是让你一个人扛。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">"我不想绑定，怕以后换供应商麻烦"</div>
+                    <div class="faq-answer">不签排他协议，你可以继续用原有供应商。但平台的价值在于：同等品质，价格更低；同等价格，品质更好。你随时可以比。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">"美澜自己做婚礼堂，会不会抢我们的客户？"</div>
+                    <div class="faq-answer">不会。美澜的定位是平台运营方，不是婚礼堂同行。我们做的是供应链服务，不是婚庆服务。赛道不一样。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">"如果平台做不起来呢？"</div>
+                    <div class="faq-answer">平台做不起来，你也没损失啊。服务费按实际采购额收，你没用不收费。万一做起来了，你就是创始盟友，权益最多。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 15: 总结 -->
+        <div class="slide slide-summary" data-slide="15">
+            <div class="summary-box">
+                <p class="summary-text">
+                    <span class="highlight">美澜东方不做供货商</span>，<br>
+                    我们牵头成立<span class="highlight">华中婚礼堂供应链联盟</span>，<br>
+                    让每家婚礼堂都能用<span class="highlight">底价买到好食材</span>，<br>
+                    美澜在帮大家省钱的过程中赚钱。
+                </p>
+                
+                <div class="keywords">
+                    <div class="keyword">
+                        <div class="keyword-icon">🤝</div>
+                        <div class="keyword-text">牵头大哥</div>
+                    </div>
+                    <div class="keyword">
+                        <div class="keyword-icon">💰</div>
+                        <div class="keyword-text">底价保障</div>
+                    </div>
+                    <div class="keyword">
+                        <div class="keyword-icon">📈</div>
+                        <div class="keyword-text">共创共赢</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 50px; font-size: 20px; opacity: 0.9;">
+                <p style="margin-bottom: 15px;">想加入联盟？先聊聊！</p>
+                <p>联系人：美澜东方 | 第一步：约谈5分钟 → 第二步：免费试用1个月 → 第三步：正式合作</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航触发区域 -->
+    <div class="nav-trigger"></div>
+    <!-- 导航控制 -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">◀</button>
+        <div class="slide-indicator" id="slideIndicator"></div>
+        <span class="slide-counter" id="slideCounter">1 / 15</span>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 15;
+
+        // 初始化幻灯片指示器
+        function initSlideIndicator() {
+            const indicator = document.getElementById('slideIndicator');
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'slide-dot' + (i === 1 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                indicator.appendChild(dot);
+            }
+        }
+
+        // 更新幻灯片
+        function updateSlide() {
+            // 更新幻灯片显示
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                slide.classList.toggle('active', index + 1 === currentSlide);
+            });
+
+            // 更新指示器
+            document.querySelectorAll('.slide-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentSlide);
+            });
+
+            // 更新计数器
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
+
+            // 更新按钮状态
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        // 下一张
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        // 上一张
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        // 跳转到指定幻灯片
+        function goToSlide(n) {
+            currentSlide = n;
+            updateSlide();
+        }
+
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                goToSlide(1);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                goToSlide(totalSlides);
+            }
+        });
+
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        // 初始化
+        initSlideIndicator();
+        updateSlide();
+
+        // 自动播放（可选）
+        // setInterval(nextSlide, 10000);
+    </script>
+</body>
+</html>
